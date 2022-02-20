@@ -11,12 +11,11 @@ contract NFT is ERC721, ERC721Enumerable {
   Counters.Counter private _idCounter;
   uint256 public  _maxSupply;
   constructor(uint256 _maxSupply) ERC721("NICOBABY", "NBB") {
-
   }
     function mint () public {
-        uint256 current = _idCounter.current();
-        _safeMint(msg.sender, current);
-        _idCounter.increment();
+        uint256 current = _idCounter.current(); //Agregando e       l contador de NFTS
+        _safeMint(msg.sender, current); //mINTEANDO EL MAXIMO SUPLU 
+        _idCounter.increment(); //Incrementando el contador de nfts.
     }
 
   // Necessary to support enumn
