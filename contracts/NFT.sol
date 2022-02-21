@@ -22,15 +22,33 @@ contract NFT is ERC721, ERC721Enumerable {
 
   // lOOF FOR THE METADATA BASED ON THE TOKEN id
   //Al añadir el view nos aseguramos que nuestros usuarios no tiene que pagar gas
-   //No hacemos una mutacion de datos es solo una consulta
-   //E4l string tiene que pasar  por la memoria para evitar errores 
+  //No hacemos una mutacion de datos es solo una consulta
+  //E4l string tiene que pasar  por la memoria para evitar errores
   function tokenURI(uint256 tokenId)
     public
     view
     override
-    returns (string memory) 
+    returns (string memory)
   {
-      require (_exists(tokenId),"ERC721 Metadata: Querying for unexisting token"); //Exits verifies that the token exists or not    
+    require(_exists(tokenId), "ERC721 Metadata: Querying for unexisting token"); //Exits verifies that the token exists or not
+    //First we encode the string together and put it in Bytes using ABI
+    // string memory jsonUri = string(abi.encodePacked("NBB", "TO the moon")); //Url for data format funcion
+/**
+Construyendo el JSON package, first arg name to the ABI encoding
+ */
+ string memory jsonURI=string (
+abi.encodePacked(
+    '{"name": "Nico Baby #"}',
+    //nEEDS TO BE QA STRING AND IT IS A NUMBER
+    //https://docs.openzeppelin.com/contracts/4.x/api/utils#Strings
+    tokenId,
+    '","description" : "This is the Nico Baby token the best token you will ever see"', "image:"""
+    // URGENT: ADD NFT URL IMAGE
+    '"}'
+)
+ )
+
+    return jsonUri;
   }
 
   // Necessary to support enumn
