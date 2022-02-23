@@ -5,9 +5,12 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "./Base64.sol";
+import "./NicoPunksDNA.sol";
+
 
 // contract NFT {
-contract NFT is ERC721, ERC721Enumerable {
+contract NFT is ERC721, ERC721Enumerable, NicoPunksDNA {
   using Counters for Counters.Counter;
   Counters.Counter private _idCounter;
   uint256 public _maxSupply;
@@ -36,8 +39,9 @@ contract NFT is ERC721, ERC721Enumerable {
 /**
 Construyendo el JSON package, first arg name to the ABI encoding
  */
- string memory jsonURI=string (
-abi.encodePacked(
+
+ string memory jsonURI=Base64.encode(
+ abi.encodePacked(
     '{"name": "Nico Baby #"}',
     //nEEDS TO BE QA STRING AND IT IS A NUMBER
     //https://docs.openzeppelin.com/contracts/4.x/api/utils#Strings
@@ -46,12 +50,13 @@ abi.encodePacked(
     // URGENT: ADD NFT URL IMAGE
     '"}'
 )
- )
-
-    return jsonUri;
+ );
+    //ADD WWW Specification
+    return string (abi.encodePacked("data: application/json; base64,", jsonURI));
   }
 
   // Necessary to support enumn
+  
   function _beforeTokenTransfer(
     address from,
     address to,
@@ -68,13 +73,4 @@ abi.encodePacked(
   {
     return super.supportsInterface(interfaceId);
   }
-
-  // function greet() public view returns (string memory) {
-  //     return greeting;
-  // }
-
-  // function setGreeting(string memory _greeting) public {
-  //     console.log("Changing greeting from '%s' to '%s'", greeting, _greeting);
-  //     greeting = _greeting;
-  // }
 }

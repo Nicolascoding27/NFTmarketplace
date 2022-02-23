@@ -13,12 +13,7 @@ const deploy = async () => {
   const deployed = await nfts.deploy();
 
   console.log("Nico Baby token deployed at:", deployed.address);
+  //Promise aftes
+  process.exit(1);
 };
 
-//Promise after deploying it would exit
-deploy()
-  .then(() => process.exit(0))
-  .catch(error => {
-    console.log(error);
-    process.exit(1);
-  });
