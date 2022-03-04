@@ -14,19 +14,65 @@ contract NFT is ERC721, ERC721Enumerable, NicoPunksDNA {
   using Counters for Counters.Counter;
   Counters.Counter private _idCounter;
   uint256 public _maxSupply;
-
+  //From token id to DNA 
+  mapping (uint256 => uint256) public tokenDNA;
   constructor(uint256 _maxSupply) ERC721("NICOBABY", "NBB") {}
-
+  string private URL= "https://avataaars.io/";
   function mint() public {
     uint256 current = _idCounter.current(); //Agregando e       l contador de NFTS
-    _safeMint(msg.sender, current); //mINTEANDO EL MAXIMO SUPLU
+    require (current < _maxSupply, "Not enogh Nico baby tokens");
+    tokenDNA[current]=deterministicPseudoRandom(current,msg.sender);
+     _safeMint(msg.sender, current); //mINTEANDO EL MAXIMO SUPLU
     _idCounter.increment(); //Incrementando el contador de nfts.
   }
-
+//wE
   // lOOF FOR THE METADATA BASED ON THE TOKEN id
   //Al añadir el view nos aseguramos que nuestros usuarios no tiene que pagar gas
   //No hacemos una mutacion de datos es solo una consulta
   //E4l string tiene que pasar  por la memoria para evitar errores
+function _baseURI() internal pure override returns (string memory) {
+  return "https://avataaars.io/";
+}
+function _paramsURI(uint256 _dna) internal view returns (string memory){
+  string memory params; 
+  //funcion p[ara concatenar strings]
+  params= string (abi.encodePacked("accsesoriesType=",
+   getAccessoriesType(_dna),
+   "&clotheColor=",
+                    getClotheColor(_dna),
+                    "&clotheType=",
+                  getClotheType(_dna),
+                    "&eyeType=",
+                    getEyeType(_dna),
+                    "&eyebrowType=",
+                    getEyeBrowType(_dna),
+                    "&facialHairColor=",
+                    getFacialHairColor(_dna),
+                    "&facialHairType=",
+                    getFacialHairType(_dna),
+                    "&hairColor=",
+                    getHairColor(_dna),
+                    "&hatColor=",
+                    getHatColor(_dna),
+                    "&graphicType=",
+                    getGraphicType(_dna),
+                    "&mouthType=",
+                    getMouthType(_dna),
+                    "&skinColor=",
+                    getSkinColor(_dna),
+                    "&topType",
+                    getTopType(_dna)
+
+   ));
+  return params;
+}
+//This function has to be a separate function because 
+//it needs to generate a preview of the image 
+function imageByDNA (uint256 _dna) public view returns (string memory){
+  string memory baseURI= _baseURI();
+  string memory params= _paramsURI(_dna);
+  return string (abi.encodePacked(baseURI,"", params));
+}
   function tokenURI(uint256 tokenId)
     public
     view
@@ -39,7 +85,6 @@ contract NFT is ERC721, ERC721Enumerable, NicoPunksDNA {
 /**
 Construyendo el JSON package, first arg name to the ABI encoding
  */
-
  string memory jsonURI=Base64.encode(
  abi.encodePacked(
     '{"name": "Nico Baby #"}',
