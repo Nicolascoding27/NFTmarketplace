@@ -2,7 +2,7 @@
 
 const { ethers } = require("hardhat");
 const deploy = async () => {
-  const  [deployer]  = await ethers.getSigners(); // Filled by hardhat config
+  const [deployer] = await ethers.getSigners(); // Filled by hardhat config
   console.log("Deploying address by", deployer.address);
 
   //Creating an instance of the deployed contract
@@ -10,10 +10,11 @@ const deploy = async () => {
    * Accesibg to the smatt contract
    */
   const nfts = await ethers.getContractFactory("NFT");
-  const deployed = await nfts.deploy();
-
-  console.log("Nico Baby token deployed at:", deployed.address);
-  //Promise aftes
-  process.exit(1);
+  const deployed = await nfts.deploy(10000);
 };
-
+deploy()
+  .then(() => process.exit(0))
+  .catch(error => {
+    console.log(error);
+    process.exit(1);
+  });
