@@ -96,7 +96,7 @@ contract NFT is ERC721, ERC721Enumerable, NicoPunksDNA {
       abi.encodePacked(
         '{ "name": "NicoFitPunk #',
         tokenId.toString(),
-        '", "description": "NicoFitPunks are a way to collect items while ypu excercise as an incentive, it was developed for Start summit 2022 "',
+        '", "description": "NicoFitPunks are a way to collect items while ypu excercise as an incentive it was developed for Start summit 2022 ","image":"',
         image,
         '"}'
       )
